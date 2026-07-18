@@ -58,7 +58,7 @@ export function myProvider(options = {}): InboundProvider {
 Ground rules:
 
 - **Never make the core depend on your platform's SDK** — providers are
-  separate packages with `inreply` as a peer dependency.
+  separate packages that depend on `inreply` (the core stays dependency-free of any platform SDK).
 - Ids are normalized (angle brackets stripped); `references` is oldest-first.
 - Header maps are lowercased.
 - Preserve the platform's full original object on `raw`.

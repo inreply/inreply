@@ -47,14 +47,11 @@
     "access": "public"
   },
   "dependencies": {
+    "inreply": "workspace:^",
     "resend": "^6.17.2",
     "zod": "^3.24.1"
   },
-  "peerDependencies": {
-    "inreply": "workspace:^"
-  },
   "devDependencies": {
-    "inreply": "workspace:*",
     "tsup": "^8.3.5",
     "vitest": "^2.1.8"
   }
