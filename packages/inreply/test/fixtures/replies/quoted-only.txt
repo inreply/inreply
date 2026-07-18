@@ -1,0 +1,2 @@
+> This whole email is quoted text with an answer buried inside it
+> which some clients produce when the user types inside the quote.

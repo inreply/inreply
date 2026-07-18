@@ -49,12 +49,12 @@
     "access": "public"
   },
   "dependencies": {
-    "email-reply-parser": "^2.3.9",
     "html-to-text": "^9.0.5",
     "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/html-to-text": "^9.0.4",
+    "email-reply-parser": "^2.3.9",
     "tsup": "^8.3.5",
     "vitest": "^2.1.8"
   }

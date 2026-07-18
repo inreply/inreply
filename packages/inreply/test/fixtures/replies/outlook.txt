@@ -1,0 +1,10 @@
+Approved. Please proceed with the rollout.
+
+-----Original Message-----
+From: Deploy Bot <bot@acme.dev>
+Sent: Monday, July 13, 2026 9:14 AM
+To: Dip <dip@example.com>
+Subject: RE: Rollout window
+
+The rollout window opens Monday at 09:00 UTC.
+Reply "approved" to confirm.
