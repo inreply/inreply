@@ -1,1 +1,2 @@
-export const VERSION = '0.0.0';
+export { resend } from './provider.js';
+export type { ResendProviderOptions } from './provider.js';

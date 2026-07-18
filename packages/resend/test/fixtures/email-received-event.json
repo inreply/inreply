@@ -1,0 +1,24 @@
+{
+  "type": "email.received",
+  "created_at": "2026-07-13T10:00:01.000Z",
+  "data": {
+    "email_id": "56761188-7520-42d8-8898-ff6fc54ce618",
+    "created_at": "2026-07-13T10:00:00.000Z",
+    "from": "Dip Dhameliya <dip@example.com>",
+    "to": ["support@yourapp.dev"],
+    "bcc": [],
+    "cc": ["Ava <ava@acme.dev>"],
+    "received_for": ["support@yourapp.dev"],
+    "message_id": "<msg-2@mail.example.com>",
+    "subject": "Re: Upgrade my plan",
+    "attachments": [
+      {
+        "id": "2a0c9ce0-3112-4728-976e-47ddcd16a318",
+        "filename": "invoice.pdf",
+        "content_type": "application/pdf",
+        "content_disposition": "attachment",
+        "content_id": null
+      }
+    ]
+  }
+}

@@ -20,8 +20,8 @@ function htmlToText(html: string): string {
 function normalizeWhitespace(text: string): string {
   return text
     .replace(/\r\n/g, '\n')
-    .replace(/[​‌‍﻿]/g, '') // zero-width characters
-    .replace(/ /g, ' '); // non-breaking spaces
+    .replace(/[\u200B\uFEFF]/g, '') // zero-width space, BOM
+    .replace(/\u00A0/g, ' '); // non-breaking spaces
 }
 
 /** Trailing noise the reply parser occasionally lets through. */
