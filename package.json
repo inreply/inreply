@@ -1,0 +1,32 @@
+{
+  "name": "inreply-monorepo",
+  "private": true,
+  "description": "Turn inbound email replies into resumable AI conversations.",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "changeset": "changeset",
+    "release": "turbo run build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.10",
+    "@eslint/js": "~9.17.0",
+    "@types/node": "^22.10.0",
+    "eslint": "~9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.3",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "~8.18.0"
+  }
+}
