@@ -8,7 +8,9 @@ const fixture = (name: string): string =>
 describe('cleanReplyText', () => {
   it('strips Gmail-style quoted history', () => {
     const result = cleanReplyText({ text: fixture('gmail.txt') });
-    expect(result).toBe("Sounds great, let's do Tuesday at 2pm.\n\nOne question: should I bring the deck?");
+    expect(result).toBe(
+      "Sounds great, let's do Tuesday at 2pm.\n\nOne question: should I bring the deck?",
+    );
   });
 
   it('strips Outlook-style original message blocks', () => {
@@ -39,7 +41,9 @@ describe('cleanReplyText', () => {
 
   it('passes plaintext-only messages through untouched', () => {
     const result = cleanReplyText({ text: fixture('plaintext-only.txt') });
-    expect(result).toBe("Hi! I'd like to upgrade my plan to Pro. What are the next steps?\n\nThanks!");
+    expect(result).toBe(
+      "Hi! I'd like to upgrade my plan to Pro. What are the next steps?\n\nThanks!",
+    );
   });
 
   it('falls back to HTML conversion when there is no text part', () => {

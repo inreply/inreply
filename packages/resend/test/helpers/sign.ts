@@ -8,7 +8,10 @@ export const TEST_SECRET = `whsec_${Buffer.from('inreply-test-signing-secret-000
  */
 export function signWebhook(
   payload: string,
-  { id = 'msg_inreply_test', timestamp = Math.floor(Date.now() / 1000) }: { id?: string; timestamp?: number } = {},
+  {
+    id = 'msg_inreply_test',
+    timestamp = Math.floor(Date.now() / 1000),
+  }: { id?: string; timestamp?: number } = {},
 ): Record<string, string> {
   const secretBytes = Buffer.from(TEST_SECRET.slice('whsec_'.length), 'base64');
   const signedContent = `${id}.${timestamp}.${payload}`;

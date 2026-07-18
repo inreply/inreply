@@ -26,8 +26,7 @@ app.post('/webhooks/resend', async (c) => {
     // conversation.messages maps 1:1 to chat messages — any AI framework works.
     const { text } = await generateText({
       model: openai('gpt-5.1'),
-      system:
-        'You are a helpful email assistant. Reply concisely in plain text, no markdown.',
+      system: 'You are a helpful email assistant. Reply concisely in plain text, no markdown.',
       messages: conversation.messages.map((m) => ({ role: m.role, content: m.text })),
     });
 

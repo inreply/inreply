@@ -62,7 +62,7 @@ Ground rules:
 - Ids are normalized (angle brackets stripped); `references` is oldest-first.
 - Header maps are lowercased.
 - Preserve the platform's full original object on `raw`.
-- Test signature verification with *real* computed signatures, not mocks —
+- Test signature verification with _real_ computed signatures, not mocks —
   see `packages/resend/test/helpers/sign.ts`.
 
 ## Pull requests

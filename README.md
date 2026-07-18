@@ -28,7 +28,7 @@ that makes you forget it exists.**
 
 ## The problem
 
-Sending email is beautifully simple. *Receiving a reply* is not. Every AI
+Sending email is beautifully simple. _Receiving a reply_ is not. Every AI
 product that converses over email rebuilds the same glue code:
 
 <table>
@@ -52,9 +52,7 @@ const event = wh.verify(rawBody, {
 if (event.type !== 'email.received') return ok();
 
 // 3. The webhook is metadata-only — fetch the body
-const { data } = await resend.emails.receiving.get(
-  event.data.email_id,
-);
+const { data } = await resend.emails.receiving.get(event.data.email_id);
 
 // 4. Prefer text, fall back to converting HTML
 let text = data.text ?? htmlToText(data.html);
@@ -79,8 +77,7 @@ const threadId = refs[0] ?? data.message_id;
 <td>
 
 ```ts
-const conversation =
-  await resumeConversation(request);
+const conversation = await resumeConversation(request);
 
 if (!conversation) return ok();
 
@@ -131,9 +128,9 @@ export async function POST(request: Request) {
 }
 ```
 
-| Env var | Where to find it |
-| --- | --- |
-| `RESEND_API_KEY` | [resend.com/api-keys](https://resend.com/api-keys) |
+| Env var                 | Where to find it                                          |
+| ----------------------- | --------------------------------------------------------- |
+| `RESEND_API_KEY`        | [resend.com/api-keys](https://resend.com/api-keys)        |
 | `RESEND_WEBHOOK_SECRET` | The signing secret on your webhook endpoint (`whsec_...`) |
 
 Then point a Resend webhook for the `email.received` event at your route.
@@ -211,7 +208,7 @@ app.post('/webhooks/resend', async (c) => {
     headers: conversation.reply.headers, // ← correct threading, zero thought
   });
 
-  await threadStore.append(conversation.threadId, /* your assistant turn */);
+  await threadStore.append(conversation.threadId, assistantTurn(text, conversation));
   return c.text('ok');
 });
 ```
@@ -227,7 +224,7 @@ straight in. InReply reads the raw body itself, which is exactly what signature
 verification needs:
 
 ```ts
-const conversation = await resumeConversation(request);   // Next.js route handler
+const conversation = await resumeConversation(request); // Next.js route handler
 const conversation = await resumeConversation(c.req.raw); // Hono
 ```
 
@@ -334,13 +331,13 @@ The core does everything else. See
 Everything throws a single `InReplyError` with a `code` and a suggested HTTP
 `status` — and verified-but-irrelevant events return `null`, never throw:
 
-| `code` | `status` | Meaning |
-| --- | --- | --- |
-| `invalid_signature` | 401 | Signature verification failed (wrong secret, or not the raw body) |
-| `invalid_request` | 400 | Missing webhook headers / malformed input |
-| `invalid_payload` | 400 | Event or API response didn't match the expected shape |
-| `fetch_failed` | 502 | The provider's API errored while fetching the email |
-| `missing_config` | 500 | Missing API key / webhook secret — thrown eagerly at startup |
+| `code`              | `status` | Meaning                                                           |
+| ------------------- | -------- | ----------------------------------------------------------------- |
+| `invalid_signature` | 401      | Signature verification failed (wrong secret, or not the raw body) |
+| `invalid_request`   | 400      | Missing webhook headers / malformed input                         |
+| `invalid_payload`   | 400      | Event or API response didn't match the expected shape             |
+| `fetch_failed`      | 502      | The provider's API errored while fetching the email               |
+| `missing_config`    | 500      | Missing API key / webhook secret — thrown eagerly at startup      |
 
 ```ts
 if (isInReplyError(error)) {

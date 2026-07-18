@@ -1,9 +1,5 @@
 export type InReplyErrorCode =
-  | 'invalid_signature'
-  | 'invalid_request'
-  | 'invalid_payload'
-  | 'fetch_failed'
-  | 'missing_config';
+  'invalid_signature' | 'invalid_request' | 'invalid_payload' | 'fetch_failed' | 'missing_config';
 
 const STATUS_BY_CODE: Record<InReplyErrorCode, number> = {
   invalid_signature: 401,

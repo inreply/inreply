@@ -49,7 +49,8 @@ export function resolveThreadId(
 export function buildReplyContext(email: InboundEmail): ReplyContext {
   // RFC 5322 §3.6.4: a reply's References is the parent's References
   // (or its In-Reply-To when References is absent) plus the parent's id.
-  const chain = email.references.length > 0 ? email.references : email.inReplyTo ? [email.inReplyTo] : [];
+  const chain =
+    email.references.length > 0 ? email.references : email.inReplyTo ? [email.inReplyTo] : [];
   const references = [...chain, email.messageId].map(toWireId).join(' ');
   const inReplyTo = toWireId(email.messageId);
 

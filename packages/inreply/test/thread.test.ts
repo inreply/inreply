@@ -109,9 +109,7 @@ describe('buildReplyContext', () => {
   });
 
   it('prefers Reply-To over From', () => {
-    const reply = buildReplyContext(
-      baseEmail({ replyTo: [{ email: 'replies@example.com' }] }),
-    );
+    const reply = buildReplyContext(baseEmail({ replyTo: [{ email: 'replies@example.com' }] }));
     expect(reply.to).toBe('replies@example.com');
   });
 

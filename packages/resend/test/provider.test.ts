@@ -52,7 +52,9 @@ describe('resend() configuration', () => {
   it('throws missing_config eagerly without a webhook secret', () => {
     vi.stubEnv('RESEND_API_KEY', '');
     vi.stubEnv('RESEND_WEBHOOK_SECRET', '');
-    expect(() => resend({ apiKey: 're_test_123' })).toThrowError(/webhookSecret|RESEND_WEBHOOK_SECRET/);
+    expect(() => resend({ apiKey: 're_test_123' })).toThrowError(
+      /webhookSecret|RESEND_WEBHOOK_SECRET/,
+    );
   });
 
   it('reads credentials from the environment', () => {

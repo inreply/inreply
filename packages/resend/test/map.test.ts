@@ -54,7 +54,16 @@ describe('toInboundEmail', () => {
   it('defaults attachment filename and content type', () => {
     const email = toInboundEmail({
       ...base,
-      attachments: [{ id: 'att-1', filename: null, content_type: null, content_id: null, content_disposition: null, size: null }],
+      attachments: [
+        {
+          id: 'att-1',
+          filename: null,
+          content_type: null,
+          content_id: null,
+          content_disposition: null,
+          size: null,
+        },
+      ],
     });
     expect(email.attachments[0]).toEqual({
       id: 'att-1',

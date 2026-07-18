@@ -21,7 +21,8 @@ function toAttachment(attachment: ReceivedEmail['attachments'][number]): Attachm
     filename: attachment.filename ?? 'attachment',
     contentType: attachment.content_type ?? 'application/octet-stream',
   };
-  if (attachment.content_disposition != null) result.contentDisposition = attachment.content_disposition;
+  if (attachment.content_disposition != null)
+    result.contentDisposition = attachment.content_disposition;
   if (attachment.content_id != null) result.contentId = attachment.content_id;
   if (attachment.size != null) result.size = attachment.size;
   return result;

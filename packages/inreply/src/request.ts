@@ -12,7 +12,9 @@ export interface RawWebhookInput {
 }
 
 function isWebRequest(input: Request | RawWebhookInput): input is Request {
-  return typeof (input as Request).text === 'function' && (input as Request).headers instanceof Headers;
+  return (
+    typeof (input as Request).text === 'function' && (input as Request).headers instanceof Headers
+  );
 }
 
 function normalizeHeaders(
@@ -50,7 +52,6 @@ export async function normalizeRequest(
     );
   }
 
-  const body =
-    typeof input.body === 'string' ? input.body : new TextDecoder().decode(input.body);
+  const body = typeof input.body === 'string' ? input.body : new TextDecoder().decode(input.body);
   return { headers: normalizeHeaders(input.headers), body };
 }
