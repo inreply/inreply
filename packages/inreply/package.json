@@ -49,8 +49,7 @@
     "access": "public"
   },
   "dependencies": {
-    "html-to-text": "^9.0.5",
-    "zod": "^3.24.1"
+    "html-to-text": "^9.0.5"
   },
   "devDependencies": {
     "@types/html-to-text": "^9.0.4",

@@ -55,7 +55,10 @@ function collapseNewlines(text: string): string {
  * removes everything (e.g. an email that is only an inline reply inside
  * quoted text), the un-stripped text is returned instead.
  */
-export function cleanReplyText(body: { text?: string; html?: string }): string {
+export function cleanReplyText(body: {
+  text?: string | undefined;
+  html?: string | undefined;
+}): string {
   const source = body.text?.trim() ? body.text : body.html ? htmlToText(body.html) : '';
   if (!source.trim()) return '';
 
