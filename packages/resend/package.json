@@ -1,6 +1,6 @@
 {
   "name": "@inreply/resend",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Resend provider for InReply — turn inbound Resend webhooks into resumable AI conversations.",
   "license": "MIT",
   "type": "module",

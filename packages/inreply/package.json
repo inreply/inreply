@@ -1,6 +1,6 @@
 {
   "name": "inreply",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Turn inbound email replies into resumable AI conversations.",
   "license": "MIT",
   "type": "module",
