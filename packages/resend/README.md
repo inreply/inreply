@@ -1,7 +1,6 @@
 # @inreply/resend
 
-The [Resend](https://resend.com) provider for [InReply](https://github.com/inreply/inreply) —
-turn inbound Resend webhooks into resumable AI conversations.
+The [Resend](https://resend.com) provider for [InReply](https://github.com/inreply/inreply) - turn inbound Resend webhooks into resumable AI conversations.
 
 ```ts
 import { createInReply } from 'inreply';

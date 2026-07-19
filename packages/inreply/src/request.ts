@@ -4,7 +4,7 @@ import type { NormalizedRequest } from './provider.js';
 /**
  * Raw webhook input for Node req-style frameworks (e.g. Express with
  * `express.raw({ type: 'application/json' })`). `body` MUST be the raw,
- * unparsed request body — signatures are computed over exact bytes.
+ * unparsed request body - signatures are computed over exact bytes.
  */
 export interface RawWebhookInput {
   headers: Record<string, string | string[] | undefined> | Headers;
@@ -40,7 +40,7 @@ export async function normalizeRequest(
 ): Promise<NormalizedRequest> {
   if (isWebRequest(input)) {
     // Reading the body ourselves guarantees the raw bytes the signature was
-    // computed over — the #1 webhook verification bug is a re-serialized body.
+    // computed over - the #1 webhook verification bug is a re-serialized body.
     const body = await input.text();
     return { headers: normalizeHeaders(input.headers), body };
   }

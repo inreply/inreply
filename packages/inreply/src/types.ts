@@ -22,7 +22,7 @@ export interface Message {
   role: 'user' | 'assistant';
   from: EmailAddress;
   to: EmailAddress[];
-  /** Cleaned plain text — quoted replies and signatures removed. Feed this to your model. */
+  /** Cleaned plain text - quoted replies and signatures removed. Feed this to your model. */
   text: string;
   /** The untouched bodies, before any cleaning. */
   original: { text?: string; html?: string };
@@ -39,9 +39,9 @@ export interface Message {
 export interface ReplyContext {
   /** Where your reply should go: the sender's Reply-To if set, otherwise their From. */
   to: string;
-  /** The address the user wrote to — a sensible `from` for your reply. */
+  /** The address the user wrote to - a sensible `from` for your reply. */
   from: string;
-  /** "Re: <topic>" — normalized so it never becomes "Re: Re: Re:". */
+  /** "Re: <topic>" - normalized so it never becomes "Re: Re: Re:". */
   subject: string;
   /** Message-ID of the inbound message, in wire format (`<...>`). */
   inReplyTo: string;
@@ -51,7 +51,7 @@ export interface ReplyContext {
   headers: { 'In-Reply-To': string; References: string };
 }
 
-/** A resumable email conversation — the object InReply hands to your agent. */
+/** A resumable email conversation - the object InReply hands to your agent. */
 export interface Conversation {
   /**
    * Stable identifier for the thread: the root Message-ID of the References
@@ -60,7 +60,7 @@ export interface Conversation {
   threadId: string;
   /** Subject of the inbound message, verbatim. */
   subject: string;
-  /** Subject with Re:/Fwd: prefixes stripped — useful as a thread title. */
+  /** Subject with Re:/Fwd: prefixes stripped - useful as a thread title. */
   topic: string;
   /** The inbound message, cleaned. */
   message: Message;
@@ -73,7 +73,7 @@ export interface Conversation {
   reply: ReplyContext;
   /** Attachment metadata for the inbound message. */
   attachments: Attachment[];
-  /** The provider's full original email object — an escape hatch, never needed on the happy path. */
+  /** The provider's full original email object - an escape hatch, never needed on the happy path. */
   raw: unknown;
 }
 

@@ -21,7 +21,7 @@ const inboundEmail = (overrides: Partial<InboundEmail> = {}): InboundEmail => ({
   ...overrides,
 });
 
-/** A provider that skips verification and returns a canned email — core sees only the contract. */
+/** A provider that skips verification and returns a canned email - core sees only the contract. */
 const fakeProvider = (
   email: InboundEmail | null,
   onReceive?: (request: NormalizedRequest) => void,
@@ -42,10 +42,10 @@ const webhookRequest = () =>
 
 describe('createInReply', () => {
   it('throws missing_config eagerly without a provider', () => {
-    // @ts-expect-error — deliberately missing provider
+    // @ts-expect-error - deliberately missing provider
     expect(() => createInReply({})).toThrowError(InReplyError);
     try {
-      // @ts-expect-error — deliberately missing provider
+      // @ts-expect-error - deliberately missing provider
       createInReply({});
     } catch (error) {
       expect(isInReplyError(error) && error.code === 'missing_config').toBe(true);
@@ -54,7 +54,7 @@ describe('createInReply', () => {
 
   it('throws missing_config for a provider without receive()', () => {
     expect(() =>
-      // @ts-expect-error — deliberately broken provider
+      // @ts-expect-error - deliberately broken provider
       createInReply({ provider: { name: 'broken' } }),
     ).toThrowError(/does not implement receive/);
   });

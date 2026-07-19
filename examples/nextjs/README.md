@@ -1,7 +1,7 @@
 # InReply + Next.js
 
 Route handlers receive a standard web `Request`, so it passes straight into
-`resumeConversation` — InReply reads the raw body itself, which is exactly what
+`resumeConversation` - InReply reads the raw body itself, which is exactly what
 signature verification needs.
 
 ```bash

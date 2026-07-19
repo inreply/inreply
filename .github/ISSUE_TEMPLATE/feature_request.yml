@@ -1,0 +1,28 @@
+name: Feature request
+description: Propose an addition - a new provider, store adapter, or core capability
+labels: ['enhancement']
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the glue code or friction this would remove.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed API
+      description: What would the developer-facing code look like?
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - New provider (SendGrid, Postmark, SES, ...)
+        - New ThreadStore adapter
+        - Core capability
+        - Documentation
+        - Other
+    validations:
+      required: true

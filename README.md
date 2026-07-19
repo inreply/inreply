@@ -51,7 +51,7 @@ const event = wh.verify(rawBody, {
 // 2. Only some events are inbound email
 if (event.type !== 'email.received') return ok();
 
-// 3. The webhook is metadata-only — fetch the body
+// 3. The webhook is metadata-only - fetch the body
 const { data } = await resend.emails.receiving.get(event.data.email_id);
 
 // 4. Prefer text, fall back to converting HTML
@@ -152,7 +152,7 @@ That's the whole integration.
     /* ... */
   },
 
-  messages: [ /* [...history, message] — oldest first, chat-shaped */ ],
+  messages: [ /* [...history, message] - oldest first, chat-shaped */ ],
 
   reply: {                              // everything a threaded reply needs
     to: 'customer@example.com',
@@ -165,16 +165,16 @@ That's the whole integration.
   },
 
   attachments: [ /* metadata */ ],
-  raw: { /* the provider's full original email — escape hatch */ },
+  raw: { /* the provider's full original email - escape hatch */ },
 }
 ```
 
 `messages` maps 1:1 to chat messages, so any AI framework consumes it in one
-`.map()` — OpenAI, Anthropic, LangGraph, Mastra, or the Vercel AI SDK.
+`.map()` - OpenAI, Anthropic, LangGraph, Mastra, or the Vercel AI SDK.
 
 ## Build an email agent
 
-The full loop — inbound reply → AI → threaded response — with the Vercel AI SDK:
+The full loop - inbound reply → AI → threaded response - with the Vercel AI SDK:
 
 ```ts
 import { createInReply, InMemoryThreadStore } from 'inreply';
@@ -219,7 +219,7 @@ Runnable versions: [`examples/ai-agent`](./examples/ai-agent),
 
 ## Framework recipes
 
-**Web `Request` (Next.js, Hono, Bun, Deno, Workers)** — pass the request
+**Web `Request` (Next.js, Hono, Bun, Deno, Workers)** - pass the request
 straight in. InReply reads the raw body itself, which is exactly what signature
 verification needs:
 
@@ -228,7 +228,7 @@ const conversation = await resumeConversation(request); // Next.js route handler
 const conversation = await resumeConversation(c.req.raw); // Hono
 ```
 
-**Node-style (Express)** — pass `{ headers, body }` with the **raw** body:
+**Node-style (Express)** - pass `{ headers, body }` with the **raw** body:
 
 ```ts
 app.post('/webhooks/resend', express.raw({ type: 'application/json' }), async (req, res) => {
@@ -238,11 +238,11 @@ app.post('/webhooks/resend', express.raw({ type: 'application/json' }), async (r
 ```
 
 > ⚠️ Use `express.raw()` on the webhook route, not `express.json()`. Signatures
-> are computed over the exact raw bytes — a re-serialized body will never verify.
+> are computed over the exact raw bytes - a re-serialized body will never verify.
 
 ## Conversation memory
 
-The core is completely stateless — thread identity comes purely from
+The core is completely stateless - thread identity comes purely from
 `Message-ID`/`References` headers, no database required. Add an optional
 `ThreadStore` and `conversation.messages` includes history:
 
@@ -253,7 +253,7 @@ interface ThreadStore {
 }
 ```
 
-That's the entire interface — a Postgres adapter is ~20 lines:
+That's the entire interface - a Postgres adapter is ~20 lines:
 
 ```ts
 const postgresStore: ThreadStore = {
@@ -275,7 +275,7 @@ const postgresStore: ThreadStore = {
 
 InReply appends inbound messages automatically and deduplicates webhook
 redeliveries, so your store can stay dumb. The bundled `InMemoryThreadStore` is
-perfect for development (state resets on restart — bring your own store in
+perfect for development (state resets on restart - bring your own store in
 production).
 
 ## How it works
@@ -329,7 +329,7 @@ The core does everything else. See
 ## Error handling
 
 Everything throws a single `InReplyError` with a `code` and a suggested HTTP
-`status` — and verified-but-irrelevant events return `null`, never throw:
+`status` - and verified-but-irrelevant events return `null`, never throw:
 
 | `code`              | `status` | Meaning                                                           |
 | ------------------- | -------- | ----------------------------------------------------------------- |
@@ -337,7 +337,7 @@ Everything throws a single `InReplyError` with a `code` and a suggested HTTP
 | `invalid_request`   | 400      | Missing webhook headers / malformed input                         |
 | `invalid_payload`   | 400      | Event or API response didn't match the expected shape             |
 | `fetch_failed`      | 502      | The provider's API errored while fetching the email               |
-| `missing_config`    | 500      | Missing API key / webhook secret — thrown eagerly at startup      |
+| `missing_config`    | 500      | Missing API key / webhook secret - thrown eagerly at startup      |
 
 ```ts
 if (isInReplyError(error)) {
@@ -347,14 +347,14 @@ if (isInReplyError(error)) {
 
 ## Roadmap
 
-- **v0.2** — `conversation.reply()` (send with threading handled, assistant turn
+- **v0.2** - `conversation.reply()` (send with threading handled, assistant turn
   stored automatically), attachment content download
-- **Providers** — SendGrid, Postmark, Amazon SES
-- **Stores** — Postgres, Redis/Upstash, LangGraph checkpointer
+- **Providers** - SendGrid, Postmark, Amazon SES
+- **Stores** - Postgres, Redis/Upstash, LangGraph checkpointer
 
 ## Contributing
 
-PRs welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md). Adding a fixture for an
+PRs welcome - see [CONTRIBUTING.md](./CONTRIBUTING.md). Adding a fixture for an
 email client we don't strip correctly yet is the single most valuable
 contribution.
 

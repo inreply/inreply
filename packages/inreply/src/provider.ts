@@ -7,7 +7,7 @@ export interface NormalizedRequest {
 }
 
 /**
- * A provider-agnostic inbound email — the only thing the InReply core
+ * A provider-agnostic inbound email - the only thing the InReply core
  * consumes. Providers verify the webhook, fetch whatever their platform
  * requires, and hand back this shape.
  */

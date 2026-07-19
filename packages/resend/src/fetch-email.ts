@@ -4,7 +4,7 @@ import { receivedEmailSchema } from './schemas.js';
 import type { ReceivedEmail } from './schemas.js';
 
 /**
- * Resend's `email.received` webhook carries metadata only — the body and
+ * Resend's `email.received` webhook carries metadata only - the body and
  * full headers live behind the Received Emails API.
  */
 export async function fetchReceivedEmail(client: Resend, emailId: string): Promise<ReceivedEmail> {

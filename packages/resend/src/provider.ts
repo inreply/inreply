@@ -53,7 +53,7 @@ export function resend(options: ResendProviderOptions = {}): InboundProvider {
         );
       }
 
-      // Delivery receipts, opens, clicks, ... — not inbound email.
+      // Delivery receipts, opens, clicks, ... - not inbound email.
       if (event.data.type !== 'email.received') return null;
 
       const received = emailReceivedEventSchema.safeParse(event.data);

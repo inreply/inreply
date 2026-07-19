@@ -7,7 +7,7 @@ const { resumeConversation } = createInReply({ provider: resend() });
 const app = express();
 
 // IMPORTANT: webhook signatures are computed over the raw bytes.
-// Use express.raw() on the webhook route — not express.json().
+// Use express.raw() on the webhook route - not express.json().
 app.post('/webhooks/resend', express.raw({ type: 'application/json' }), async (req, res) => {
   try {
     const conversation = await resumeConversation({

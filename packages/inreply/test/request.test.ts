@@ -41,7 +41,7 @@ describe('normalizeRequest', () => {
 
   it('throws invalid_request for malformed input', async () => {
     await expect(
-      // @ts-expect-error — deliberately wrong shape
+      // @ts-expect-error - deliberately wrong shape
       normalizeRequest({ nope: true }),
     ).rejects.toSatisfy((e: unknown) => isInReplyError(e) && e.code === 'invalid_request');
   });

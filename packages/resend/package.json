@@ -1,7 +1,7 @@
 {
   "name": "@inreply/resend",
   "version": "0.0.1",
-  "description": "Resend provider for InReply — turn inbound Resend webhooks into resumable AI conversations.",
+  "description": "Resend provider for InReply - turn inbound Resend webhooks into resumable AI conversations.",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
@@ -55,5 +55,9 @@
     "@vitest/coverage-v8": "^2.1.8",
     "tsup": "^8.3.5",
     "vitest": "^2.1.8"
+  },
+  "homepage": "https://github.com/inreply/inreply#readme",
+  "bugs": {
+    "url": "https://github.com/inreply/inreply/issues"
   }
 }

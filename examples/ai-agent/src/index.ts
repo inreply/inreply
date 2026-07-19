@@ -23,14 +23,14 @@ app.post('/webhooks/resend', async (c) => {
     const conversation = await resumeConversation(c.req.raw);
     if (!conversation) return c.text('ok');
 
-    // conversation.messages maps 1:1 to chat messages — any AI framework works.
+    // conversation.messages maps 1:1 to chat messages - any AI framework works.
     const { text } = await generateText({
       model: openai('gpt-5.1'),
       system: 'You are a helpful email assistant. Reply concisely in plain text, no markdown.',
       messages: conversation.messages.map((m) => ({ role: m.role, content: m.text })),
     });
 
-    // Send the reply with correct threading — In-Reply-To and References handled for you.
+    // Send the reply with correct threading - In-Reply-To and References handled for you.
     await resend.emails.send({
       from: conversation.reply.from,
       to: conversation.reply.to,

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 /**
- * We validate only what we consume and let everything else pass through —
+ * We validate only what we consume and let everything else pass through.
  * Resend may add fields at any time and that must never break inbound mail.
  */
 export const webhookEventSchema = z

@@ -1,0 +1,40 @@
+name: Bug report
+description: Something is broken or behaving unexpectedly
+labels: ['bug']
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Package and version
+      placeholder: inreply@0.1.0 / @inreply/resend@0.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Reply cleaning (quotes/signatures not stripped correctly)
+        - Thread resolution / reply headers
+        - Webhook verification
+        - Provider (Resend)
+        - Types / build output
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: >
+        Smallest possible reproduction. For reply-cleaning bugs, paste the
+        offending email body (redact anything personal) and the output you
+        expected - that becomes a test fixture.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual behavior
+    validations:
+      required: true

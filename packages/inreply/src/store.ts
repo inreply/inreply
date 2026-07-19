@@ -10,7 +10,7 @@ export interface InMemoryThreadStoreOptions {
 
 /**
  * A Map-backed ThreadStore for development and demos.
- * State resets on every deploy or restart — bring your own store in production.
+ * State resets on every deploy or restart - bring your own store in production.
  */
 export class InMemoryThreadStore implements ThreadStore {
   private readonly threads = new Map<string, Message[]>();

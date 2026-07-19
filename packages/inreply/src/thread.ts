@@ -27,7 +27,7 @@ export function parseReferences(header: string | undefined): string[] {
 
 const REPLY_PREFIX = /^\s*((re|fw|fwd|aw|sv|vs)(\[\d+\])?\s*:\s*)+/i;
 
-/** Strip Re:/Fwd:/AW:/Re[2]: style prefixes — "Re: Re: Hello" → "Hello". */
+/** Strip Re:/Fwd:/AW:/Re[2]: style prefixes - "Re: Re: Hello" → "Hello". */
 export function normalizeSubject(subject: string): string {
   return subject.replace(REPLY_PREFIX, '').trim();
 }

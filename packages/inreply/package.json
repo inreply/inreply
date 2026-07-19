@@ -57,5 +57,9 @@
     "email-reply-parser": "^2.3.9",
     "tsup": "^8.3.5",
     "vitest": "^2.1.8"
+  },
+  "homepage": "https://github.com/inreply/inreply#readme",
+  "bugs": {
+    "url": "https://github.com/inreply/inreply/issues"
   }
 }

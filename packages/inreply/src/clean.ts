@@ -51,7 +51,7 @@ function collapseNewlines(text: string): string {
  * Extract the latest human message from an email body: prefer the text part,
  * fall back to converted HTML, then strip quoted replies and signatures.
  *
- * Never returns an empty string when the input had content — if stripping
+ * Never returns an empty string when the input had content - if stripping
  * removes everything (e.g. an email that is only an inline reply inside
  * quoted text), the un-stripped text is returned instead.
  */
