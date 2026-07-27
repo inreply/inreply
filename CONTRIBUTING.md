@@ -12,7 +12,7 @@ pnpm lint         # eslint
 pnpm typecheck    # tsc --noEmit
 ```
 
-Node ≥ 18 and pnpm 9 required. The repo is a Turborepo monorepo:
+Node ≥ 20 and pnpm 9 required. The repo is a Turborepo monorepo:
 
 ```
 packages/inreply    # core - provider-agnostic primitive

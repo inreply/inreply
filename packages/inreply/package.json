@@ -16,10 +16,11 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "LICENSE"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "build": "tsup",
@@ -61,5 +62,6 @@
   "homepage": "https://github.com/inreply/inreply#readme",
   "bugs": {
     "url": "https://github.com/inreply/inreply/issues"
-  }
+  },
+  "author": "Dip Dhameliya <dipdhameliya2001@gmail.com>"
 }
