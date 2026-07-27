@@ -6,6 +6,12 @@ export interface InMemoryThreadStoreOptions {
    * used thread is evicted. Defaults to 1000.
    */
   maxThreads?: number;
+  /**
+   * Maximum messages kept per thread. When exceeded, the oldest messages are
+   * dropped. Bounds memory even if one sender floods a single thread.
+   * Defaults to 500.
+   */
+  maxMessagesPerThread?: number;
 }
 
 /**
@@ -15,9 +21,11 @@ export interface InMemoryThreadStoreOptions {
 export class InMemoryThreadStore implements ThreadStore {
   private readonly threads = new Map<string, Message[]>();
   private readonly maxThreads: number;
+  private readonly maxMessagesPerThread: number;
 
   constructor(options: InMemoryThreadStoreOptions = {}) {
     this.maxThreads = options.maxThreads ?? 1000;
+    this.maxMessagesPerThread = options.maxMessagesPerThread ?? 500;
   }
 
   async get(threadId: string): Promise<Message[]> {
@@ -30,6 +38,9 @@ export class InMemoryThreadStore implements ThreadStore {
   async append(threadId: string, message: Message): Promise<void> {
     const messages = this.threads.get(threadId) ?? [];
     messages.push(message);
+    if (messages.length > this.maxMessagesPerThread) {
+      messages.splice(0, messages.length - this.maxMessagesPerThread);
+    }
     this.touch(threadId, messages);
     this.evict();
   }

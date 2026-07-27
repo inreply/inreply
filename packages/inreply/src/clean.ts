@@ -5,16 +5,30 @@ import { convert } from 'html-to-text';
  * Convert HTML mail to plain text. Quoted history in HTML mail almost always
  * lives inside <blockquote>, so skipping it removes most of the thread before
  * reply parsing even runs.
+ *
+ * Email bodies are attacker-controlled (anyone can write to an inbound
+ * address), so conversion is bounded: without `limits`, maliciously deep
+ * nesting overflows the call stack, and the try/catch keeps any parser
+ * failure from poisoning the webhook with endless retries.
  */
 function htmlToText(html: string): string {
-  return convert(html, {
-    wordwrap: false,
-    selectors: [
-      { selector: 'blockquote', format: 'skip' },
-      { selector: 'img', format: 'skip' },
-      { selector: 'a', options: { hideLinkHrefIfSameAsText: true } },
-    ],
-  });
+  try {
+    return convert(html, {
+      wordwrap: false,
+      limits: {
+        maxDepth: 256,
+        maxInputLength: 1 << 22, // 4 MiB
+      },
+      selectors: [
+        { selector: 'blockquote', format: 'skip' },
+        { selector: 'img', format: 'skip' },
+        { selector: 'a', options: { hideLinkHrefIfSameAsText: true } },
+      ],
+    });
+  } catch {
+    // Last resort: crude tag strip so the message still yields its text.
+    return html.replace(/<[^>]*>/g, ' ');
+  }
 }
 
 function normalizeWhitespace(text: string): string {

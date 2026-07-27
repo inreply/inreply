@@ -1,9 +1,15 @@
 import type { InboundEmail } from './provider.js';
 import type { ReplyContext } from './types.js';
 
-/** Strip whitespace and one pair of surrounding angle brackets from a Message-ID. */
+/**
+ * Strip whitespace and one pair of surrounding angle brackets from a
+ * Message-ID. All whitespace and control characters are removed: a valid id
+ * never contains them, and ids flow into outbound In-Reply-To/References
+ * headers, so nothing header-breaking may survive.
+ */
 export function normalizeMessageId(id: string): string {
-  const trimmed = id.trim();
+  // eslint-disable-next-line no-control-regex
+  const trimmed = id.replace(/[\s\u0000-\u001F\u007F]+/g, '');
   if (trimmed.startsWith('<') && trimmed.endsWith('>')) {
     return trimmed.slice(1, -1);
   }
@@ -27,9 +33,19 @@ export function parseReferences(header: string | undefined): string[] {
 
 const REPLY_PREFIX = /^\s*((re|fw|fwd|aw|sv|vs)(\[\d+\])?\s*:\s*)+/i;
 
-/** Strip Re:/Fwd:/AW:/Re[2]: style prefixes - "Re: Re: Hello" → "Hello". */
+/**
+ * Strip Re:/Fwd:/AW:/Re[2]: style prefixes - "Re: Re: Hello" → "Hello".
+ * Control characters are removed as well: the result flows into the outbound
+ * Subject header via `reply.subject`.
+ */
 export function normalizeSubject(subject: string): string {
-  return subject.replace(REPLY_PREFIX, '').trim();
+  return (
+    subject
+      // eslint-disable-next-line no-control-regex
+      .replace(/[\u0000-\u001F\u007F]+/g, ' ')
+      .replace(REPLY_PREFIX, '')
+      .trim()
+  );
 }
 
 /**
