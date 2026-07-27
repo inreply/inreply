@@ -1,0 +1,45 @@
+# Security Model
+
+InReply sits on a public, unauthenticated endpoint and processes content
+written by arbitrary third parties. The design treats both layers as hostile.
+
+## What InReply handles for you
+
+**Unauthenticated HTTP callers.** Requests without a valid provider
+signature are rejected before anything is parsed or fetched. Oversized
+bodies are refused early (1 MiB cap; webhooks are a few KB). Error responses
+to unverified callers contain only static text.
+
+**Hostile email content.** A valid signature only proves the provider
+delivered the email; the email itself is untrusted. So:
+
+- Reply extraction and HTML conversion are bounded against maliciously deep
+  nesting and pathological inputs
+- Values that flow into your outbound headers (`reply.subject`,
+  `reply.headers`) are stripped of control characters
+- Header maps use null prototypes, so attacker-chosen header names cannot
+  touch object prototypes
+- The bundled in-memory store is bounded on both axes
+
+## What your application must still handle
+
+**Thread spoofing.** `threadId` comes from the `References` header, which
+the sender controls. Anyone who learns a thread's root Message-ID can send an
+email that resolves to that thread. If you use a shared `ThreadStore` and
+feed history to an AI, a third party could pull another conversation's
+history into their reply. For sensitive threads, scope store lookups by
+sender (key on `threadId + from.email`) or verify
+`conversation.message.from` against the thread's known participants.
+
+**Prompt injection.** `conversation.message.text` is untrusted text going
+into your model. Do not grant the model tools or permissions you would not
+grant the email sender.
+
+**Production storage.** `InMemoryThreadStore` is for development: bounded,
+but volatile and single-instance.
+
+## Reporting a vulnerability
+
+Please use GitHub private vulnerability reporting on the
+[repository](https://github.com/inreply/inreply/security). Details in
+[SECURITY.md](https://github.com/inreply/inreply/blob/main/SECURITY.md).

@@ -1,0 +1,63 @@
+# Providers
+
+InReply solves a universal problem, so the core is provider-agnostic. The
+`inreply` package knows nothing about any email platform; providers are
+separate packages that implement one interface.
+
+```
+                 InReply
+                    │
+     ┌──────────────┼──────────────┐
+  Resend        SendGrid        Postmark
+  (v0.1)        (planned)       (planned)
+```
+
+## Resend, the first provider
+
+```ts
+import { createInReply } from 'inreply';
+import { resend } from '@inreply/resend';
+
+const { resumeConversation } = createInReply({
+  provider: resend(), // reads RESEND_API_KEY + RESEND_WEBHOOK_SECRET
+});
+```
+
+`@inreply/resend` handles svix signature verification, the metadata-only
+`email.received` webhook, fetching the full message from the Received Emails
+API, and mapping everything to the normalized shape. Options can be passed
+explicitly: `resend({ apiKey, webhookSecret })`.
+
+## Writing a provider
+
+A provider is one method:
+
+```ts
+import type { InboundProvider, InboundEmail, NormalizedRequest } from 'inreply';
+
+export function myProvider(options = {}): InboundProvider {
+  // Validate config eagerly; throw InReplyError('missing_config', ...) here.
+  return {
+    name: 'my-provider',
+    async receive(request: NormalizedRequest): Promise<InboundEmail | null> {
+      // 1. Verify the webhook signature against request.body (raw string).
+      //    Throw InReplyError('invalid_signature', ...) on failure.
+      // 2. Return null for verified events that are not inbound email.
+      // 3. Fetch the full message if your platform's webhook is metadata-only.
+      // 4. Map to the normalized InboundEmail shape.
+    },
+  };
+}
+```
+
+Ground rules:
+
+- Never make the core depend on your platform's SDK
+- Ids are normalized (angle brackets stripped); `references` is oldest-first;
+  the core exports `normalizeMessageId` and `parseReferences` to help
+- Header maps are lowercased
+- Preserve the platform's full original object on `raw`
+- Test signature verification with real computed signatures, not mocks
+
+The [Resend provider source](https://github.com/inreply/inreply/tree/main/packages/resend)
+is the reference implementation, about 250 lines including schemas.

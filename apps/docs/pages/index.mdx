@@ -1,0 +1,47 @@
+# InReply
+
+**Every AI application knows how to send emails. None of them know how to
+continue conversations.**
+
+Sending is one line. But when a human hits _Reply_, you are suddenly parsing
+MIME, stripping quoted history, deleting signatures, decoding `References`
+headers, and hoping your response lands in the same thread.
+
+InReply turns an inbound email reply into one clean, resumable conversation:
+
+```ts
+const conversation = await resumeConversation(request);
+await myAgent.reply(conversation);
+```
+
+## What it deletes from your codebase
+
+Every AI product that converses over email rebuilds the same glue:
+
+1. Verify the webhook signature over the raw body
+2. Ignore events that are not inbound email
+3. Fetch the full message (the webhook is metadata-only)
+4. Prefer the text part, convert HTML when missing
+5. Strip quoted history ("On Mon ... wrote:", `>` lines, Outlook blocks)
+6. Strip signatures (`-- `, "Sent from my iPhone")
+7. Parse `Message-ID` / `In-Reply-To` / `References`
+8. Resolve which conversation this belongs to
+9. Rebuild the reply chain and normalize "Re: Re: Re:" subjects
+
+InReply owns all nine. Your code sees one object: the
+[Conversation](/conversation).
+
+## Design principles
+
+- **One primitive, not a framework.** InReply hands you a clean object and
+  gets out of the way. Bring any AI SDK, any storage, any HTTP framework.
+- **Provider-agnostic core.** The `inreply` package has no email-platform
+  dependencies. [Resend](https://resend.com) is the first provider adapter;
+  the interface for the next one is a single method.
+- **Stateless by default.** Thread identity comes from email headers alone.
+  Persistence is an optional two-method interface.
+- **Hostile-input hardened.** Anyone can email your inbound address, so
+  bodies, subjects, and headers are treated as untrusted. See the
+  [security model](/security).
+
+Start with the [Quickstart](/quickstart).

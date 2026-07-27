@@ -1,0 +1,75 @@
+# Conversation Memory
+
+The core is completely stateless: thread identity comes from email headers,
+so InReply works with no database at all. Add a `ThreadStore` when you want
+`conversation.messages` to include history.
+
+## The interface
+
+Two methods. That is the entire contract:
+
+```ts
+interface ThreadStore {
+  /** Messages for a thread, oldest first. [] for unknown threads. */
+  get(threadId: string): Promise<Message[]>;
+  /** Append one message. InReply handles deduplication. */
+  append(threadId: string, message: Message): Promise<void>;
+}
+```
+
+```ts
+const { resumeConversation } = createInReply({
+  provider: resend(),
+  threadStore: new InMemoryThreadStore(),
+});
+```
+
+InReply appends every inbound message automatically and checks for the
+message id before appending, so webhook redeliveries never duplicate history.
+Stores stay dumb on purpose.
+
+## Recording your own replies
+
+Append your assistant turns with the same store instance so the next inbound
+reply sees them:
+
+```ts
+await threadStore.append(conversation.threadId, {
+  id: `assistant-${conversation.message.id}`,
+  role: 'assistant',
+  from: { email: conversation.reply.from },
+  to: [{ email: conversation.reply.to }],
+  text,
+  original: { text },
+  subject: conversation.reply.subject,
+  date: new Date().toISOString(),
+  attachments: [],
+});
+```
+
+## A Postgres store in ~20 lines
+
+```ts
+const postgresStore: ThreadStore = {
+  async get(threadId) {
+    const { rows } = await pool.query(
+      'SELECT message FROM threads WHERE thread_id = $1 ORDER BY created_at',
+      [threadId],
+    );
+    return rows.map((r) => r.message);
+  },
+  async append(threadId, message) {
+    await pool.query('INSERT INTO threads (thread_id, message) VALUES ($1, $2)', [
+      threadId,
+      message,
+    ]);
+  },
+};
+```
+
+## `InMemoryThreadStore`
+
+Bundled for development and demos. Bounded on both axes (1000 threads LRU,
+500 messages per thread) so it cannot grow without limit, but it resets on
+every restart and is not multi-instance safe. Bring your own store in
+production.

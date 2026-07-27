@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 470" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+  <defs>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#818cf8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- canvas -->
+  <rect width="960" height="470" rx="14" fill="#0d1117"/>
+  <rect x="0.5" y="0.5" width="959" height="469" rx="14" fill="none" stroke="#30363d"/>
+
+  <!-- ============ LEFT: the email thread ============ -->
+  <text x="36" y="42" fill="#8b949e" font-size="13">CANDIDATE'S INBOX</text>
+
+  <!-- invite email (always visible) -->
+  <g>
+    <rect x="36" y="56" width="330" height="86" rx="8" fill="#161b22" stroke="#30363d"/>
+    <text x="52" y="80" fill="#e6edf3" font-size="13" font-weight="bold">Ava from Acme</text>
+    <text x="52" y="99" fill="#8b949e" font-size="12">Interview invitation: Platform Engineer</text>
+    <text x="52" y="122" fill="#c9d1d9" font-size="12">Reply with a few times that work</text>
+    <text x="52" y="136" fill="#c9d1d9" font-size="12">for you next week!</text>
+  </g>
+
+  <!-- candidate reply (appears) -->
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;1;1;1;0" keyTimes="0;0.06;0.1;0.85;0.9;0.95;0.97;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="36" y="154" width="330" height="128" rx="8" fill="#161b22" stroke="#22d3ee"/>
+    <text x="52" y="178" fill="#e6edf3" font-size="13" font-weight="bold">Sam Rivera</text>
+    <text x="52" y="197" fill="#8b949e" font-size="12">Re: Interview invitation: Platform...</text>
+    <text x="52" y="220" fill="#c9d1d9" font-size="12">Tuesday 2pm works great!</text>
+    <!-- the junk every reply drags along -->
+    <g fill="#57606a" font-size="11">
+      <text x="52" y="240">On Mon, Ava from Acme wrote:</text>
+      <text x="52" y="254">&gt; Reply with a few times that...</text>
+      <text x="52" y="270">--</text>
+      <text x="52" y="270" dx="18">Sent from my iPhone</text>
+    </g>
+    <!-- strike the junk as InReply cleans it -->
+    <g stroke="#f85149" stroke-width="1.4" opacity="0">
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.2;0.24;0.9;1" dur="14s" repeatCount="indefinite"/>
+      <line x1="50" y1="236" x2="238" y2="236"/>
+      <line x1="50" y1="250" x2="230" y2="250"/>
+      <line x1="50" y1="266" x2="182" y2="266"/>
+    </g>
+  </g>
+
+  <!-- AI reply (appears near the end) -->
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.66;0.72;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="36" y="294" width="330" height="104" rx="8" fill="#161b22" stroke="#818cf8"/>
+    <text x="52" y="318" fill="#e6edf3" font-size="13" font-weight="bold">Ava from Acme</text>
+    <text x="52" y="337" fill="#8b949e" font-size="12">Re: Interview invitation: Platform...</text>
+    <text x="52" y="360" fill="#c9d1d9" font-size="12">Booked! Tuesday 2pm. You'll get a</text>
+    <text x="52" y="376" fill="#c9d1d9" font-size="12">calendar invite shortly. Anything</text>
+    <text x="52" y="392" fill="#c9d1d9" font-size="12">you'd like to know beforehand?</text>
+    <text x="290" y="318" fill="#818cf8" font-size="10">AI, same thread</text>
+  </g>
+
+  <!-- ============ MIDDLE: InReply ============ -->
+  <g>
+    <rect x="416" y="196" width="128" height="44" rx="22" fill="none" stroke="url(#accent)" stroke-width="1.6"/>
+    <text x="480" y="223" fill="#e6edf3" font-size="16" font-weight="bold" text-anchor="middle">InReply</text>
+    <rect x="416" y="196" width="128" height="44" rx="22" fill="none" stroke="url(#accent)" stroke-width="1.6" opacity="0">
+      <animate attributeName="opacity" values="0;0;1;0;1;0;0" keyTimes="0;0.13;0.16;0.19;0.22;0.25;1" dur="14s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-width" values="1.6;4;1.6" keyTimes="0;0.19;1" dur="14s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+  <!-- flow: reply -> InReply -->
+  <g stroke="#22d3ee" stroke-width="1.6" fill="none" opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.12;0.16;0.9;1" dur="14s" repeatCount="indefinite"/>
+    <path d="M 366 218 H 410" stroke-dasharray="5 4"/>
+    <path d="M 404 212 L 412 218 L 404 224"/>
+  </g>
+  <!-- flow: InReply -> conversation -->
+  <g stroke="#818cf8" stroke-width="1.6" fill="none" opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.25;0.3;0.9;1" dur="14s" repeatCount="indefinite"/>
+    <path d="M 544 218 H 588" stroke-dasharray="5 4"/>
+    <path d="M 582 212 L 590 218 L 582 224"/>
+  </g>
+
+  <!-- webhook label -->
+  <text x="480" y="262" fill="#57606a" font-size="11" text-anchor="middle" opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.12;0.16;0.9;1" dur="14s" repeatCount="indefinite"/>
+    verify + fetch + clean + thread
+  </text>
+
+  <!-- ============ RIGHT: what your code receives ============ -->
+  <text x="594" y="42" fill="#8b949e" font-size="13">WHAT YOUR CODE RECEIVES</text>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.3;0.36;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="594" y="56" width="330" height="230" rx="8" fill="#161b22" stroke="#30363d"/>
+    <text x="610" y="84" fill="#8b949e" font-size="12.5">const conversation = await</text>
+    <text x="628" y="102" fill="#8b949e" font-size="12.5">resumeConversation(request)</text>
+    <g font-size="12.5">
+      <text x="610" y="132" fill="#e6edf3">{</text>
+      <text x="626" y="152" fill="#79c0ff">threadId<tspan fill="#e6edf3">:</tspan> <tspan fill="#a5d6ff">'msg-0@acme.dev'</tspan>,</text>
+      <text x="626" y="172" fill="#79c0ff">message.text<tspan fill="#e6edf3">:</tspan> <tspan fill="#7ee787">'Tuesday 2pm works great!'</tspan>,</text>
+      <text x="626" y="192" fill="#79c0ff">messages<tspan fill="#e6edf3">:</tspan> <tspan fill="#a5d6ff">[invite, reply]</tspan>,</text>
+      <text x="626" y="212" fill="#79c0ff">reply.headers<tspan fill="#e6edf3">:</tspan> <tspan fill="#a5d6ff">{ threaded }</tspan>,</text>
+      <text x="610" y="236" fill="#e6edf3">}</text>
+    </g>
+    <text x="610" y="268" fill="#57606a" font-size="11">no quotes, no signatures, chat-shaped</text>
+  </g>
+
+  <!-- AI step -->
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.5;0.56;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="594" y="302" width="330" height="96" rx="8" fill="#161b22" stroke="#30363d"/>
+    <text x="610" y="330" fill="#8b949e" font-size="12.5">const { text } = await generateText({</text>
+    <text x="628" y="350" fill="#8b949e" font-size="12.5">messages: conversation.messages</text>
+    <text x="610" y="370" fill="#8b949e" font-size="12.5">})</text>
+    <text x="610" y="390" fill="#7ee787" font-size="12">// then send with conversation.reply</text>
+  </g>
+
+  <!-- flow back to inbox -->
+  <g stroke="#818cf8" stroke-width="1.6" fill="none" opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.6;0.66;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <path d="M 594 350 H 480 V 246" stroke-dasharray="5 4"/>
+    <path d="M 474 254 L 480 244 L 486 254"/>
+    <path d="M 480 196 V 120 H 372" stroke-dasharray="5 4"/>
+    <path d="M 380 114 L 370 120 L 380 126"/>
+  </g>
+
+  <!-- caption -->
+  <text x="480" y="448" fill="#8b949e" font-size="13" text-anchor="middle">Every reply resumes the conversation. That is the whole primitive.</text>
+</svg>

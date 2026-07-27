@@ -1,0 +1,55 @@
+# Framework Recipes
+
+`resumeConversation` accepts two input shapes, which covers every framework.
+
+## Web `Request` (Next.js, Hono, Bun, Deno, Workers)
+
+Pass the request straight in. InReply reads the raw body itself, which is
+exactly what signature verification needs:
+
+```ts
+// Next.js route handler
+const conversation = await resumeConversation(request);
+
+// Hono
+const conversation = await resumeConversation(c.req.raw);
+```
+
+## Node-style (Express, Fastify, raw node:http)
+
+Pass `{ headers, body }` where `body` is the **raw** bytes:
+
+```ts
+app.post('/webhooks/resend', express.raw({ type: 'application/json' }), async (req, res) => {
+  const conversation = await resumeConversation({
+    headers: req.headers,
+    body: req.body,
+  });
+  // ...
+});
+```
+
+With plain `node:http`, collect the body chunks yourself and pass the
+concatenated string or `Uint8Array`.
+
+## The one gotcha: raw bodies
+
+Webhook signatures are computed over the exact bytes on the wire. Any
+middleware that parses and re-serializes JSON changes those bytes, and
+verification fails with `invalid_signature`.
+
+- Express: use `express.raw({ type: 'application/json' })` on the webhook
+  route, never `express.json()`
+- Next.js and Hono: nothing to do, InReply reads the body itself
+- Custom setups: make sure nothing consumed or transformed the stream first
+
+## Runnable examples
+
+- [`examples/ai-recruiter`](https://github.com/inreply/inreply/tree/main/examples/ai-recruiter):
+  the complete AI-over-email flow
+- [`examples/hono`](https://github.com/inreply/inreply/tree/main/examples/hono):
+  the smallest possible handler
+- [`examples/express`](https://github.com/inreply/inreply/tree/main/examples/express):
+  the raw-body pattern
+- [`examples/nextjs`](https://github.com/inreply/inreply/tree/main/examples/nextjs):
+  route handlers

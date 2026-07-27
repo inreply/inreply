@@ -1,0 +1,76 @@
+# The Conversation Object
+
+`resumeConversation(request)` resolves to `null` (a verified event that is
+not inbound email) or a `Conversation`:
+
+```ts
+interface Conversation {
+  threadId: string; // stable id for the whole thread
+  subject: string; // verbatim
+  topic: string; // subject without Re:/Fwd: noise
+  message: Message; // the inbound message, cleaned
+  messages: Message[]; // full thread, oldest first
+  reply: ReplyContext; // everything a threaded reply needs
+  attachments: Attachment[];
+  raw: unknown; // the provider's original object, untouched
+}
+```
+
+## `message` and `messages`
+
+Each `Message` is chat-shaped by design:
+
+```ts
+interface Message {
+  id: string; // Message-ID, brackets stripped
+  role: 'user' | 'assistant';
+  from: EmailAddress; // { email, name? }
+  to: EmailAddress[];
+  text: string; // cleaned: quotes and signatures removed
+  original: { text?: string; html?: string }; // untouched bodies
+  subject: string;
+  date: string; // ISO 8601
+  attachments: Attachment[];
+}
+```
+
+Feeding any AI framework is one map:
+
+```ts
+messages: conversation.messages.map((m) => ({ role: m.role, content: m.text }));
+```
+
+The cleaning pipeline prefers the text part, converts HTML only when text is
+missing, strips quoted history and signatures, and never returns an empty
+string when the sender wrote something. The untouched input always survives
+on `message.original`.
+
+## `threadId`
+
+The root `Message-ID` of the `References` chain, falling back to
+`In-Reply-To`, then to the message's own id for brand-new threads. Every
+reply in a thread resolves to the same value, statelessly, with no database.
+
+## `reply`
+
+Everything needed to send a correctly threaded response:
+
+```ts
+interface ReplyContext {
+  to: string; // sender's Reply-To, else From
+  from: string; // the address they wrote to
+  subject: string; // "Re: <topic>", never "Re: Re: Re:"
+  inReplyTo: string; // wire format
+  references: string;
+  headers: { 'In-Reply-To': string; References: string };
+}
+```
+
+Pass `reply.headers` straight into your provider's send call and the response
+lands in the same thread in every mail client.
+
+## Errors and the `null` contract
+
+Events that verify correctly but are not inbound email (delivery receipts,
+opens, clicks) return `null`. Everything that deserves a non-200 response
+throws an [`InReplyError`](/errors).

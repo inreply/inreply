@@ -17,7 +17,8 @@ Node ≥ 20 and pnpm 9 required. The repo is a Turborepo monorepo:
 ```
 packages/inreply    # core - provider-agnostic primitive
 packages/resend     # @inreply/resend provider
-examples/*          # runnable framework examples
+examples/*          # runnable examples (ai-recruiter is the flagship)
+apps/docs           # documentation site (Next.js + Nextra)
 ```
 
 ## The most valuable contribution: reply fixtures

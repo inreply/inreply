@@ -1,0 +1,73 @@
+# Quickstart
+
+## Install
+
+```sh npm2yarn
+npm i inreply @inreply/resend
+```
+
+## Configure
+
+Two environment variables:
+
+| Variable                | Where to find it                                          |
+| ----------------------- | --------------------------------------------------------- |
+| `RESEND_API_KEY`        | [resend.com/api-keys](https://resend.com/api-keys)        |
+| `RESEND_WEBHOOK_SECRET` | The signing secret (`whsec_...`) on your webhook endpoint |
+
+## Handle replies
+
+```ts filename="app/api/inbound/route.ts"
+import { createInReply, isInReplyError } from 'inreply';
+import { resend } from '@inreply/resend';
+
+const { resumeConversation } = createInReply({ provider: resend() });
+
+export async function POST(request: Request) {
+  try {
+    const conversation = await resumeConversation(request);
+    if (!conversation) return new Response('ok'); // delivery receipt, open, ...
+
+    console.log(conversation.message.text); // the clean human reply
+
+    return new Response('ok');
+  } catch (error) {
+    if (isInReplyError(error)) {
+      return new Response(error.message, { status: error.status });
+    }
+    throw error;
+  }
+}
+```
+
+Point a Resend webhook for the `email.received` event at your route
+([dashboard guide](https://resend.com/docs/dashboard/webhooks/introduction)),
+send an email to your inbound address, and reply to it.
+
+## Answer with AI, in the same thread
+
+```ts
+import { generateText } from 'ai';
+import { openai } from '@ai-sdk/openai';
+import { Resend } from 'resend';
+
+const resendClient = new Resend();
+
+const { text } = await generateText({
+  model: openai('gpt-5.1'),
+  system: 'You are a helpful email assistant. Reply in plain text.',
+  messages: conversation.messages.map((m) => ({ role: m.role, content: m.text })),
+});
+
+await resendClient.emails.send({
+  from: conversation.reply.from,
+  to: conversation.reply.to,
+  subject: conversation.reply.subject,
+  text,
+  headers: conversation.reply.headers, // lands in the same thread
+});
+```
+
+The complete runnable version, an AI recruiter that schedules interviews over
+email, lives at
+[`examples/ai-recruiter`](https://github.com/inreply/inreply/tree/main/examples/ai-recruiter).

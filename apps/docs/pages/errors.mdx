@@ -1,0 +1,56 @@
+# Error Handling
+
+InReply throws exactly one error type, with a `code` discriminant and a
+suggested HTTP `status` for your webhook response:
+
+```ts
+import { isInReplyError } from 'inreply';
+
+try {
+  const conversation = await resumeConversation(request);
+} catch (error) {
+  if (isInReplyError(error)) {
+    return new Response(error.message, { status: error.status });
+  }
+  throw error;
+}
+```
+
+| `code`              | `status` | Meaning                                                              |
+| ------------------- | -------- | -------------------------------------------------------------------- |
+| `invalid_signature` | 401      | Verification failed: wrong secret, or the body was not the raw bytes |
+| `invalid_request`   | 400      | Missing webhook headers, malformed input, or oversized body          |
+| `invalid_payload`   | 400      | The event or API response did not match the expected shape           |
+| `fetch_failed`      | 502      | The provider's API errored while fetching the email                  |
+| `missing_config`    | 500      | Missing API key or webhook secret, thrown eagerly at startup         |
+
+## The `null` contract
+
+Verified events that are simply not inbound email (delivery receipts, opens,
+clicks) return `null` instead of throwing. They are a normal condition, not
+an error:
+
+```ts
+const conversation = await resumeConversation(request);
+if (!conversation) return new Response('ok');
+```
+
+## Debugging
+
+InReply is silent by default. Pass an `onDebug` hook to see each pipeline
+stage:
+
+```ts
+createInReply({
+  provider: resend(),
+  onDebug: (event, data) => console.log(event, data),
+});
+// request:normalized, provider:received, thread:resolved,
+// store:appended / store:redelivery, provider:skipped
+```
+
+## Common cause of `invalid_signature`
+
+A body-parsing middleware consumed the request before InReply saw it.
+Signatures are computed over exact bytes; see
+[Framework Recipes](/recipes#the-one-gotcha-raw-bodies).
